@@ -1,0 +1,31 @@
+*{
+    box-sizing: border-box;
+    
+}
+
+body {
+    background-color: #ecf5ff;
+    font-size: 16px;
+    color:#333;
+    line-height: 18px;
+}
+
+.menu {
+    font-size: 1.5em;
+}
+#score link{
+    text-decoration: none;
+    color:purple;
+}
+#timer{
+    float: right;
+}
+
+.container{
+    height: 300px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 5px;
+    width:600px;
+
+
+}
