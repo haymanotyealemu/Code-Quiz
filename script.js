@@ -19,6 +19,24 @@ answer: 1 },
         choice3:"msg('Hello World');",
         choice4:"alert('Hello World');",
         answer: 4 
-    }  
+    },
+    {
+        question: "Commonly used data types DO NOT include:",
+        choice1: "strings", 
+        choice2: "booleans", 
+        choice3: "alerts", 
+        choice4:"numbers",
+        answer: 3
+    },
+    {
+        question: "Which built-in method combines the text of two strings and returns a new string?",
+        choice1: "append()", 
+        choice2: "concat()", 
+        choice3: "attach()", 
+        choice4:"None of the above.",
+        answer: 2
+    }
 
-]
+];
+// Dom Manipulation
+var startQuiz = document.get
