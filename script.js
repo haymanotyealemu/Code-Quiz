@@ -84,8 +84,20 @@ function showQuestion(){
 
 // Show answer choices on the page and event deligation to lists.
 function answerChoices(){
-    var choices = document.createElement("ol");
-    choices.textContent = 
+    var lists = document.createElement("ol");
+    // for loop
+    for (var i=0; i<questions[index].choices.length;i++){
+        var options = document.createElement("li");
+        options.textContent = questions[index].choices[i];
+        var optionButton=document.createElement("button");
+        optionButton.setAttribute("style",("width:"+options.innerHTML.length));
+        optionButton.append(options);
+        optionButton.setAttribute("id",i);
+        lists.append(optionButton);
+
+    }
+    questionDiv.append(lists);
+    lists.addEventListener("click",validate);
 }
 
 
