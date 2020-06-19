@@ -20,13 +20,13 @@ answer: "<script>" },
         quiz: "Which built-in method combines the text of two strings and returns a new string?",
         choices: ["append()","concat()", "attach()","None of the above."],
         answer: "concat()"
-}
+},
 
 ];
 // Dom Manipulation
 var sectionEl = document.getElementById("main-content");
 var divEl = document.getElementById("container");
-var startQuizbtn = document.getElementById("my-submit");
+var startQuizbtn = document.getElementById("my-quiz");
 var timerEl = document.getElementById("time-span");
 
 // Variable Declaration
@@ -44,10 +44,10 @@ function setTime(){
     else{
         secondsLeft = 0;
     }
-        timerEl = secondsLeft;
+        timerEl.innerHTML = secondsLeft;
     if(secondsLeft === 0){
         clearInterval(timeInterval);
-        timerEl = secondsLeft;
+        timerEl.innerHTML = secondsLeft;
         emptyQuiz2(questionDiv);
         finalScore();
     }
@@ -99,22 +99,73 @@ function answerChoices(){
     questionDiv.append(lists);
     lists.addEventListener("click",validate);
 }
+// This function is called when startQuiz button is clicked. Timer starts, show the question page 
+function questionShow(event){
+    if (event.target.getAttribute("id")=== my-quiz){
+        event.preventDefault();
+        setTime();
+        showQuestion();
+        timerEl.innerHTML = secondsLeft;
+        divEl;
+        divEl.classList.add("hide");
+        questionDiv;
+        questionDiv.setAttribute("id","quizShow");
 
+    }
+
+}
 
 // Render question function
 
-let lastquestionIndex = questions.length - 1;
-let runningquestionIndex = 0;
-function renderQuestion(){
+  // final result and create the result box page using javascript.
+function  finalScore(){
+    if (secondsLeft>0){
+        clearInterval(timeInterval);
+    }
+    var message = document.createElement("h1");
+    message.textContent = "All Done!!";
+    message.setAttribute("style","margin-left:3.5em;");
+    questionDiv.append(message);
+
+    var secondMessage = document.createElement("h2");
+    secondMessage.textContent = "Your Final Score is :" +score;
+    message2.setAttribute("style","margin-left:5em;");
+    questionDiv.append(secondMessage);
+
+    var label=document.createElement("label");
+    label.textContent="Enter Initials:"
+    label.setAttribute("style","margin-left:4em;margin-top:2rem;");
+    questionDiv.append(label);
+
+    var initialsBox=document.createElement("input");
+    initialsBox.setAttribute("type","text");
+    initialsBox.setAttribute("id","initials");
+    label.setAttribute("for","initials");
+    initialsBox.setAttribute("style","margin-left:1em;margin-bottom:3em;margin-top:2em;");
+    questionDiv.append(initialsBox);
+
+    var submitButton=document.createElement("input");
+    submitButton.setAttribute("type","submit");
+    submitButton.setAttribute("id","submitButton");
+    submitButton.setAttribute("class","button");
+    submitButton.setAttribute("style","display:inline-block;position:relative;left:3%;padding:0px;font-size:0.8rem;");
+    questionDiv.append(submitButton);
+    
+    submitButton.addEventListener("click",function(event){
+        event.preventDefault();
+        players.push({name:score});
+
     
 
+
+});
 }
+
+
 // Start Quiz button. Here our start quiz button handles a click event.
 startQuizbtn.addEventListener("click", function(event){
     event.preventDefault();
-    var questionDiv = document.createElement("div");
-    questionDiv.textContent = (questions[i]);
-    divEl.appendChild(questionDiv);
+    
 
 
 });
