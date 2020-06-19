@@ -48,7 +48,7 @@ function setTime(){
     if(secondsLeft === 0){
         clearInterval(timeInterval);
         timerEl.innerHTML = secondsLeft;
-        emptyQuiz2(questionDiv);
+        clearQuiz(questionDiv);
         finalScore();
     }
     },1000)
@@ -56,17 +56,28 @@ function setTime(){
 
 var scores=[];
 //this is the object in which I store my players.
-var players={
+var player={
     name:"",
     score:0,
 };
 
  //This function removes all the children of el
-function emptyQuiz2(el){
+function clearQuizto(el){
 
     while (el.firstChild) {
         el.removeChild(el.firstChild);
     } 
+}
+
+//finds the index of player e in the player list
+function find(e){ 
+
+    for (var j=0;j<scores.length;j++){
+        if (scores[j].name===(e.name)){
+            return j;
+        }
+    }
+    return -1;
 }
 
 //Shows the questions on the page
@@ -99,9 +110,57 @@ function answerChoices(){
     questionDiv.append(lists);
     lists.addEventListener("click",validate);
 }
+// This function checks the player answer.
+function checkanswer(event){
+    event.preventDefault();
+    var answer ;
+    if(event.target.matches("li")){
+        answer = event.target.parentElement.getAttribute("id");
+    }
+    else if (event.target.matches("button")){
+        answer = event.target.getAttribute("id"); 
+    }
+    else{
+        return;
+    }
+}
+// show the result to the player and divide the page in section.
+questionDiv.append(document.createElement("hr"));
+var result = document.createElement("p");
+result.classList.add("answer");
+if(questions[index].answer==questions[index].answer){ //checks if answer is right
+    result.textContent="Right!!";
+    console.log("right");
+}
+else{
+    result.textContent="Wrong!!";
+    console.log("wrong");
+    if((secondsLeft-20)>=0){
+        secondsLeft-=20; //subtract 20 seconds from the timer if the answer us wrong and we user has more than 20 seconds
+    } 
+    else{
+        secondsLeft=0; //otherwise user runs out of time
+        
+    }   
+    
+}
+questionDiv.append(result); //show the result
+
+if (index<questions.length){ //checks if all the questions are answered
+index++;
+} 
+else{
+   // alert("it's over!!");
+    alert("it's over!!");
+}  
+
+clearQuizto(questionDiv); //If all the question is answered, the question page is deleted
+
+
+
 // This function is called when startQuiz button is clicked. Timer starts, show the question page 
 function questionShow(event){
-    if (event.target.getAttribute("id")=== my-quiz){
+    if (event.target.getAttribute("id")=== "my-quiz"){
         event.preventDefault();
         setTime();
         showQuestion();
@@ -115,7 +174,40 @@ function questionShow(event){
 
 }
 
-// Render question function
+//Get the initials and the score.This function is fired up when submit button is cicked, store the player in the local storage 
+function storeScore(event){
+    event.preventDefault();
+    var exist=-1;
+    var ini=document.getElementById("initials");
+
+    player={
+        name: ini.value.toUpperCase(),
+        score:secondsLeft,
+    };
+    scores=JSON.parse(localStorage.getItem("competitor"));
+
+    if(scores==null){
+        scores=[];
+        exists=-1;
+    }
+    else{
+        var exists=find(player);
+    
+    }   
+    
+    if(exists>=0){
+        scores.splice(exists,1); //if the entry is already in the local storage, remove it first to store the new score
+        console.log(scores);
+        localStorage.setItem("competitor",JSON.stringify(scores));
+    }
+    scores.push(player); 
+        
+
+    
+    localStorage.setItem("competitor",JSON.stringify(scores));
+
+window.open("scores.html","_top");//open the page that lists the players with max scores
+}
 
   // final result and create the result box page using javascript.
 function  finalScore(){
@@ -128,7 +220,7 @@ function  finalScore(){
     questionDiv.append(message);
 
     var secondMessage = document.createElement("h2");
-    secondMessage.textContent = "Your Final Score is :" +score;
+    secondMessage.textContent = "Your Final Score is :" +secondsLeft;
     message2.setAttribute("style","margin-left:5em;");
     questionDiv.append(secondMessage);
 
@@ -151,22 +243,14 @@ function  finalScore(){
     submitButton.setAttribute("style","display:inline-block;position:relative;left:3%;padding:0px;font-size:0.8rem;");
     questionDiv.append(submitButton);
     
-    submitButton.addEventListener("click",function(event){
-        event.preventDefault();
-        players.push({name:score});
+    submitButton.addEventListener("click", storeScore);     
 
-    
-
-
-});
 }
 
 
+
 // Start Quiz button. Here our start quiz button handles a click event.
-startQuizbtn.addEventListener("click", function(event){
-    event.preventDefault();
+startQuizbtn.addEventListener("click",questionShow);
     
-
-
-});
+    
 
