@@ -6,7 +6,7 @@
 body {
     background-color: #ecf5ff;
     font-size: 16px;
-    color:#333;
+    color:black;
     line-height: 18px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     padding:10px;
@@ -54,6 +54,9 @@ h1{
     margin:2rem;
     
 }
+h2{
+    font-size:1em;
+}
 #container{
     position: relative;
     max-width: 50vw;
@@ -65,7 +68,7 @@ h1{
 #main-content{  
     vertical-align :middle;
     padding:0.3rem;
-    background-color:#2F4F4F;
+    background-color:#556B2F;
     margin:2rem auto;
     font-size:1.2em;
     max-width: 50vw;
@@ -95,9 +98,7 @@ h1{
     background-color:#56a5eb;
     font-weight: bold;
 }
-h2{
-    font-size: 16px;
-}
+
 ol{
     margin-left:20px;
     padding-left:15px;

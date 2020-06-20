@@ -13,7 +13,7 @@ var questions = [
 {
     quiz:"How do you write 'Hello World' in alert box?",
     choices: ["msgBox('Hello World');","alertBox('Hello World');","msg('Hello World');","alert('Hello World');"],
-    answer: "alert('Hello World')"
+    answer: "alert('Hello World');"
 },
 {
     quiz: "Commonly used data types DO NOT include:",
@@ -32,8 +32,6 @@ var startQuizEl = document.getElementById("startQuiz")
 var sectionEl = document.getElementById("main-content");
 var containerEl = document.getElementById("container");
 var timerEl = document.getElementById("time-span");
-
-
 
 
 var scores=[];
@@ -84,6 +82,7 @@ function questionShow(event){
         questionDiv=document.createElement("div");
         questionDiv.setAttribute("id","quizShow");
         showQuestion();
+        finalScore();
     }
 
 }
@@ -139,32 +138,32 @@ function  finalScore(){
     var message = document.createElement("h1");
     message.textContent = "All Done!!";
     message.setAttribute("style","margin-left:3.5em;");
-    questionDiv.append(message);
-
     var secondMessage = document.createElement("h2");
     secondMessage.textContent = "Your Final Score is :" +secondsLeft;
     message2.setAttribute("style","margin-left:5em;");
-    questionDiv.append(secondMessage);
 
     var label=document.createElement("label");
     label.textContent="Enter Initials:"
     label.setAttribute("style","margin-left:4em;margin-top:2rem;");
-    questionDiv.append(label);
+    
 
     var initialsBox=document.createElement("input");
     initialsBox.setAttribute("type","text");
     initialsBox.setAttribute("id","initials");
     label.setAttribute("for","initials");
     initialsBox.setAttribute("style","margin-left:1em;margin-bottom:3em;margin-top:2em;");
-    questionDiv.append(initialsBox);
+   
 
     var submitButton=document.createElement("input");
     submitButton.setAttribute("type","submit");
     submitButton.setAttribute("id","submitButton");
     submitButton.setAttribute("class","button");
     submitButton.setAttribute("style","display:inline-block;position:relative;left:3%;padding:0px;font-size:0.8rem;");
+    questionDiv.append(message);
+    questionDiv.append(secondMessage);
+    questionDiv.append(label);
+    questionDiv.append(initialsBox);
     questionDiv.append(submitButton);
-    
     submitButton.addEventListener("click", storeScore);     
 
 }
