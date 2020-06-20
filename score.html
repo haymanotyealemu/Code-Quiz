@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./style.css">
     <title>High Scores</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header></header>
     <section id="main-content">
-    <div id="container">
-        <h1>High Scores:</h1>
-        <textarea readonly cols="40" rows="4" id="texarea">
-        </textarea>
-        <div class="buttons">
-            <a href="index.html"><input type="submit" id="Goback" class="button" value="Go Back"></a>
+        <div id="container">
+            <h1>High Scores:</h1>
+            <textarea readonly rows="50" cols="50" id="texarea">
+            </textarea>
+            <a href="index.html"><input type="submit" id="back" class="button" value="Go Back"></a>
             <a href="#"><input type="submit" id="clear" class="button" value="Clear Highscore"></a>
-        </div>
         
+        </div>  
     </section>   
-    </div>
+    
     <!--here we write the script for our page-->
     <script>
         // DOM manipulation

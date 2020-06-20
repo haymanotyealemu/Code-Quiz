@@ -1,40 +1,60 @@
 // Array of object Questions and Answers stored in a variable.
-var questions = [{quiz:"Inside which HTML element do   we put the JavaScript?",
+var questions = [
+{
+    quiz:"Inside which HTML element do   we put the JavaScript?",
     choices: ["<script>","<Javascript>","<Js>","<scripting>"],
-answer: "<script>" },
+    answer: "<script>" 
+},
 {
     quiz:"What is the correct syntax for reffering to an external script",
     choices: ["<script href='xxx.js'>","<script name ='xxx.js'>","<script src ='xxx.js'>","<script file ='xxx.js'>"],
-    answer: "<script src ='xxx.js'>" },
-{
-        quiz:"How do you write 'Hello World' in alert box?",
-        choices: ["msgBox('Hello World');","alertBox('Hello World');","msg('Hello World');","alert('Hello World');"],
-        answer: "alert('Hello World')"
+    answer: "<script src ='xxx.js'>" 
 },
 {
-        quiz: "Commonly used data types DO NOT include:",
-        choices: ["strings","booleans","alerts","numbers",], 
-        answer: "alerts"
+    quiz:"How do you write 'Hello World' in alert box?",
+    choices: ["msgBox('Hello World');","alertBox('Hello World');","msg('Hello World');","alert('Hello World');"],
+    answer: "alert('Hello World')"
 },
 {
-        quiz: "Which built-in method combines the text of two strings and returns a new string?",
-        choices: ["append()","concat()", "attach()","None of the above."],
-        answer: "concat()"
+    quiz: "Commonly used data types DO NOT include:",
+    choices: ["strings","booleans","alerts","numbers",], 
+    answer: "alerts"
+},
+{
+    quiz: "Which built-in method combines the text of two strings and returns a new string?",
+    choices: ["append()","concat()", "attach()","None of the above."],
+    answer: "concat()"
 },
 
 ];
 // Dom Manipulation
+var startQuizEl = document.getElementById("startQuiz")
 var sectionEl = document.getElementById("main-content");
-var divEl = document.getElementById("container");
-var startQuizbtn = document.getElementById("my-quiz");
+var containerEl = document.getElementById("container");
 var timerEl = document.getElementById("time-span");
 
-// Variable Declaration
-var questionDiv = document.createElement("div");
-var secondsLeft = 20*questions.length; // Given that 20 second for each question.
-var score = 0;
-var index = 0;
 
+
+
+var scores=[];
+
+//this is the object in which I store my players.
+var player={
+    name:"",
+    score:0,
+};
+
+ //This function removes all the children of el
+function emptyQiz2(el){
+
+    while (el.firstChild) {
+        el.removeChild(el.firstChild);
+    } 
+}
+index=0;
+
+
+var secondsLeft = 20*questions.length; // Given that 20 second for each question.
 //set time for questions.
 function setTime(){
     var timeInterval = setInterval(function(){
@@ -48,27 +68,25 @@ function setTime(){
     if(secondsLeft === 0){
         clearInterval(timeInterval);
         timerEl.innerHTML = secondsLeft;
-        clearQuiz(questionDiv);
+        emptyQuiz2(questionDiv);
         finalScore();
     }
     },1000)
 }
 
-var scores=[];
-//this is the object in which I store my players.
-var player={
-    name:"",
-    score:0,
-};
+// This function is called when startQuiz button is clicked. Timer starts, show the question page 
+function questionShow(event){
+    if (event.target.getAttribute("id")=== "startQuiz"){
+        event.preventDefault();
+        timerEl.innerHTML = secondsLeft;
+        setTime();
+        containerEl.classList.add("hide");
+        questionDiv=document.createElement("div");
+        questionDiv.setAttribute("id","quizShow");
+        showQuestion();
+    }
 
- //This function removes all the children of el
-function clearQuizto(el){
-
-    while (el.firstChild) {
-        el.removeChild(el.firstChild);
-    } 
 }
-
 //finds the index of player e in the player list
 function find(e){ 
 
@@ -79,101 +97,6 @@ function find(e){
     }
     return -1;
 }
-
-//Shows the questions on the page
-function showQuestion(){
-    if(index >= questions.length)
-    { finalScore();
-        return;}
-    var question=document.createElement("p");
-    question.textContent=questions[index].quiz;
-    questionDiv.append(question);
-    questionDiv.setAttribute("style","display:block");
-    sectionEl.append(questionDiv);
-    answerChoices(); //lists the options
-}
-
-// Show answer choices on the page and event deligation to lists.
-function answerChoices(){
-    var lists = document.createElement("ol");
-    // for loop
-    for (var i=0; i<questions[index].choices.length;i++){
-        var options = document.createElement("li");
-        options.textContent = questions[index].choices[i];
-        var optionButton=document.createElement("button");
-        optionButton.setAttribute("style",("width:"+options.innerHTML.length));
-        optionButton.append(options);
-        optionButton.setAttribute("id",i);
-        lists.append(optionButton);
-
-    }
-    questionDiv.append(lists);
-    lists.addEventListener("click",validate);
-}
-// This function checks the player answer.
-function checkanswer(event){
-    event.preventDefault();
-    var answer ;
-    if(event.target.matches("li")){
-        answer = event.target.parentElement.getAttribute("id");
-    }
-    else if (event.target.matches("button")){
-        answer = event.target.getAttribute("id"); 
-    }
-    else{
-        return;
-    }
-}
-// show the result to the player and divide the page in section.
-questionDiv.append(document.createElement("hr"));
-var result = document.createElement("p");
-result.classList.add("answer");
-if(questions[index].answer==questions[index].answer){ //checks if answer is right
-    result.textContent="Right!!";
-    console.log("right");
-}
-else{
-    result.textContent="Wrong!!";
-    console.log("wrong");
-    if((secondsLeft-20)>=0){
-        secondsLeft-=20; //subtract 20 seconds from the timer if the answer us wrong and we user has more than 20 seconds
-    } 
-    else{
-        secondsLeft=0; //otherwise user runs out of time
-        
-    }   
-    
-}
-questionDiv.append(result); //show the result
-
-if (index<questions.length){ //checks if all the questions are answered
-index++;
-} 
-else{
-   // alert("it's over!!");
-    alert("it's over!!");
-}  
-
-clearQuizto(questionDiv); //If all the question is answered, the question page is deleted
-
-
-
-// This function is called when startQuiz button is clicked. Timer starts, show the question page 
-function questionShow(event){
-    if (event.target.getAttribute("id")=== "my-quiz"){
-        event.preventDefault();
-        setTime();
-        showQuestion();
-        timerEl.innerHTML = secondsLeft;
-        divEl;
-        divEl.classList.add("hide");
-        questionDiv;
-        questionDiv.setAttribute("id","quizShow");
-
-    }
-
-}
-
 //Get the initials and the score.This function is fired up when submit button is cicked, store the player in the local storage 
 function storeScore(event){
     event.preventDefault();
@@ -206,10 +129,9 @@ function storeScore(event){
     
     localStorage.setItem("competitor",JSON.stringify(scores));
 
-window.open("scores.html","_top");//open the page that lists the players with max scores
+window.open("score.html","_top");//open the page that lists the players with max scores
 }
-
-  // final result and create the result box page using javascript.
+// final result and create the result box page using javascript.
 function  finalScore(){
     if (secondsLeft>0){
         clearInterval(timeInterval);
@@ -246,11 +168,96 @@ function  finalScore(){
     submitButton.addEventListener("click", storeScore);     
 
 }
+//Shows the questions on the page
+function showQuestion(){
+    if(index >= questions.length)
+    { finalScore();return;}
+    var question=document.createElement("p");
+    question.textContent=questions[index].quiz;
+    questionDiv.append(question);
+    questionDiv.setAttribute("style","display:block");
+    sectionEl.append(questionDiv);
 
+    answerChoices(); //lists the options
+}
 
+function emptyQuiz(el){ //This is called after each question is shown and user choses an option, it empties the page and shows another question
+    setTimeout(function(){
+        while (el.firstChild) {
+            el.removeChild(el.firstChild);
+        }
+
+        showQuestion();
+
+    },1000);  
+}
+
+// Show answer choices on the page and event deligation to lists.
+function answerChoices(){
+    var lists = document.createElement("ol");
+    // for loop
+    for (var i=0; i<questions[index].choices.length;i++){
+        var options = document.createElement("li");
+        options.textContent = questions[index].choices[i];
+        var optionButton=document.createElement("button");
+        optionButton.setAttribute("style",("width:"+options.innerHTML.length));
+        optionButton.append(options);
+        optionButton.setAttribute("id",i);
+        lists.append(optionButton);
+
+    }
+    questionDiv.append(lists);
+    lists.addEventListener("click",checkanswer);
+}
+// This function checks the player answer.
+function checkanswer(event){
+    event.preventDefault();
+    var answer ;
+    if(event.target.matches("li")){
+        answer = event.target.parentElement.getAttribute("id");
+    }
+    else if (event.target.matches("button")){
+        answer = event.target.getAttribute("id"); 
+    }
+    else{
+        return;
+    }
+
+// show the result to the player and divide the page in section.
+questionDiv.append(document.createElement("hr"));
+var result = document.createElement("p");
+result.classList.add("answer");
+if(questions[index].choices[answer]==questions[index].answer){ //checks if answer is right
+    result.textContent="Right!!";
+    console.log("right");
+}
+else{
+    result.textContent="Wrong!!";
+    console.log("wrong");
+    if((secondsLeft-20)>=0){
+        secondsLeft-=20; //subtract 20 seconds from the timer if the answer us wrong and we user has more than 20 seconds
+    } 
+    else{
+        secondsLeft=0; //otherwise user runs out of time
+        return;
+    }   
+    
+}
+questionDiv.append(result); //show the result
+
+if (index<questions.length){ //checks if all the questions are answered
+index++;
+} 
+else{
+   // alert("it's over!!");
+    return;
+}  
+
+emptyQuiz(questionDiv); //If all the question is answered, the question page is deleted.
+}
 
 // Start Quiz button. Here our start quiz button handles a click event.
-startQuizbtn.addEventListener("click",questionShow);
+startQuizEl.addEventListener("click",questionShow);
     
     
 
