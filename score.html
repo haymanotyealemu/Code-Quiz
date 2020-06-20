@@ -27,69 +27,69 @@
         var gobackBtn = document.getElementById("Goback");
         var textArea = document.getElementById("texarea");
 
-        //player is where I store the objects from local storage
-        var player={
+        //entry is where I store the objects from local storage
+        var entry={
                     name:"",        //player name
                     score:0,        //player score
         }; 
 
-        var maxPlayer=[]             //This array holds the players with max store
+        var maxEntry=[]          //This array holds the players with max store
         var maxScore=0;
         texarea.innerHTML="";
-        player=JSON.parse(localStorage.getItem("competitor")); //get the player from local storage and store it in array player
+        entry=JSON.parse(localStorage.getItem("competitor")); //get the player from local storage and store it in array player
 
         function find(e){ //finds the index of player e in the player list
-            for (var j=0;j<player.length;j++){
-                if ((player[j].name===e.name) && (player[j].score===e.score)){
+            for (var j=0;j<entry.length;j++){
+                if ((entry[j].name===e.name) && (entry[j].score===e.score)){
                     return j;
                 }
             }
 
         }
         
-        function findMax(player){  //finds the players with max scores
-            for (var i=0;i<player.length;i++){
-                if(player[i].score>=maxScore){
-                    if (player[i].score==maxScore){
-                        max.push(player[i]);
+        function findMax(entry){  //finds the players with max scores
+            for (var i=0;i < entry.length;i++){
+                if(entry[i].score >= maxScore){
+                    if (entry[i].score==maxScore){
+                        maxEntry.push(entry[i]);
                     }
                     else{
-                        maxScore=player[i].score;
-                        maxPlayer=[];
-                        maxPlayer.push(player[i]) ;  
+                        maxScore=entry[i].score;
+                        maxEntry=[];
+                        maxEntry.push(entry[i]) ;  
                     }       
                 }    
             }     
             
-            for (var i=0;i<maxPlayer.length;i++){
-                texarea.innerHTML+=maxPlayer[i].name+":"+maxPlayer[i].score+"\n";  
+            for (var i=0;i<maxEntry.length;i++){
+                texarea.innerHTML+=maxEntry[i].name+":"+maxEntry[i].score+"\n";  
             }
         }
 
-        findMax(player);
+        findMax(entry);
         //When clear button is clicked the players with max score are removed from local storage. If there are still players, the max score
         //of remaining players is shown on the page.
         clearBtn.addEventListener("click",function(){
             
-                for(var i=0;i<maxPlayer.length;i++){
-                    var indexf=find(maxPlayer[i]);
-                    player.splice(indexf,1);
-                    localStorage.setItem("",JSON.stringify(player));
+                for(var i=0;i<maxEntry.length;i++){
+                    var indexf=find(maxEntry[i]);
+                    entry.splice(indexf,1);
+                    localStorage.setItem("competitor",JSON.stringify(entry));
                     
                 }
 
                 texarea.innerHTML="";
-                if (player.length>0){
-                    maxPlayer=[];
+                if (entry.length>0){
+                    maxEntry=[];
                     maxScore=0;
-                    findMax(player);
+                    findMax(entry);
                 }          
                 
         
         });
         //when back button is clicked the updated player list is pushed to the storage
         gobackBtn.addEventListener("click",function(){
-            localStorage.setItem("competitor",JSON.stringify(player));
+            localStorage.setItem("competitor",JSON.stringify(entry));
         });
 
     </script>
