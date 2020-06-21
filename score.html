@@ -24,7 +24,7 @@
     <script>
         // DOM manipulation
         var clearBtn = document.getElementById("clear");
-        var gobackBtn = document.getElementById("Goback");
+        var gobackBtn = document.getElementById("back");
         var textArea = document.getElementById("texarea");
 
         //entry is where I store the objects from local storage
@@ -36,7 +36,7 @@
         var maxEntry=[]          //This array holds the players with max store
         var maxScore=0;
         texarea.innerHTML="";
-        entry=JSON.parse(localStorage.getItem("competitor")); //get the player from local storage and store it in array player
+        entry=JSON.parse(localStorage.getItem("contenders")); //get the player from local storage and store it in array player
 
         function find(e){ //finds the index of player e in the player list
             for (var j=0;j<entry.length;j++){
@@ -74,7 +74,7 @@
                 for(var i=0;i<maxEntry.length;i++){
                     var indexf=find(maxEntry[i]);
                     entry.splice(indexf,1);
-                    localStorage.setItem("competitor",JSON.stringify(entry));
+                    localStorage.setItem("contenders",JSON.stringify(entry));
                     
                 }
 
@@ -89,7 +89,7 @@
         });
         //when back button is clicked the updated player list is pushed to the storage
         gobackBtn.addEventListener("click",function(){
-            localStorage.setItem("competitor",JSON.stringify(entry));
+            localStorage.setItem("contenders",JSON.stringify(entry));
         });
 
     </script>

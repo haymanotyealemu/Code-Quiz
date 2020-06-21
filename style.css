@@ -172,6 +172,19 @@ hr{
     width:12em;
     margin-left:1em;
 }
+
+#quizTime{
+    width:50vw;
+    height:auto;
+    background-color:#11d473;
+    padding:0.5rem;
+    font-size:1.2em;
+    text-align:left;
+    display:none;
+
+    box-shadow:0 0 0 10px green;
+}
+
 @media screen and (max-width:992px){
     #timer{
         margin-right:3em;

@@ -28,7 +28,7 @@ var questions = [
 
 ];
 // Dom Manipulation
-var startQuizEl = document.getElementById("startQuiz")
+var startQuizEl = document.getElementById("startQuiz");
 var sectionEl = document.getElementById("main-content");
 var containerEl = document.getElementById("container");
 var timerEl = document.getElementById("time-span");
@@ -55,7 +55,7 @@ index=0;
 var secondsLeft = (10*questions.length); // Given that 10 second for each question.
 //set time for questions.
 function setTime(){
-    var timeInterval = setInterval(function(){
+    timeInterval = setInterval(function(){
     if(secondsLeft > 0){
         secondsLeft--;
     }
@@ -99,14 +99,14 @@ function find(e){
 //Get the initials and the score.This function is fired up when submit button is cicked, store the player in the local storage 
 function storeScore(event){
     event.preventDefault();
-    var exist = -1;
+    var exist=-1;
     var ini=document.getElementById("initials");
 
     entry={
         name: ini.value.toUpperCase(),
         score:secondsLeft,
     };
-    scores=JSON.parse(localStorage.getItem("competitor"));
+    scores=JSON.parse(localStorage.getItem("contenders"));
 
     if(scores==null){
         scores=[];
@@ -120,13 +120,13 @@ function storeScore(event){
     if(exists>=0){
         scores.splice(exists,1); //if the entry is already in the local storage, remove it first to store the new score
         console.log(scores);
-        localStorage.setItem("competitor",JSON.stringify(scores));
+        localStorage.setItem("contenders",JSON.stringify(scores));
     }
     scores.push(entry); 
         
 
     
-    localStorage.setItem("competitor",JSON.stringify(scores));
+    localStorage.setItem("contenders",JSON.stringify(scores));
 
     window.open("score.html","_top");//open the page that lists the players with max scores
 }
@@ -140,7 +140,7 @@ function  finalStage(){
     message.setAttribute("style","margin-left:3.5em;");
     var secondMessage = document.createElement("h2");
     secondMessage.textContent = "Your Final Score is :" +secondsLeft;
-    message2.setAttribute("style","margin-left:5em;");
+    secondMessage.setAttribute("style","margin-left:5em;");
 
     var label=document.createElement("label");
     label.textContent="Enter Initials:"
@@ -169,8 +169,9 @@ function  finalStage(){
 }
 //Shows the questions on the page
 function showQuestion(){
-    if(index >= questions.length)
-        {finalStage();return;}
+    if(index>=questions.length)
+        {finalStage();
+            return;}
     var question=document.createElement("p");
     question.textContent=questions[index].quiz;
     questionDiv.append(question);
@@ -190,26 +191,8 @@ function emptyQuiz(el){ //This is called after each question is shown and user c
 
     },1000);  
 }
-
-// Show answer choices on the page and event deligation to lists.
-function answerChoices(){
-    var lists = document.createElement("ol");
-    // for loop
-    for (var i=0; i<questions[index].choices.length;i++){
-        var options = document.createElement("li");
-        options.textContent = questions[index].choices[i];
-        var optionButton=document.createElement("button");
-        optionButton.setAttribute("style",("width:"+options.innerHTML.length));
-        optionButton.append(options);
-        optionButton.setAttribute("id",i);
-        lists.append(optionButton);
-
-    }
-    questionDiv.append(lists);
-    lists.addEventListener("click",checkanswer);
-}
 // This function checks the player answer.
-function checkanswer(event){
+function validate(event){
     event.preventDefault();
     var answer ;
     if(event.target.matches("li")){
@@ -233,9 +216,9 @@ function checkanswer(event){
     else{
         result.textContent="Wrong!!";
         console.log("wrong");
-    if((secondsLeft-20)>=0)
+    if((secondsLeft-5)>=0)
         {
-        secondsLeft-=20; //subtract 20 seconds from the timer if the answer us wrong and we user has more than 20 seconds
+        secondsLeft-=5; //subtract 5 seconds from the timer if the answer us wrong and we user has more than 5 seconds
         } 
     else{
         secondsLeft=0; //otherwise user runs out of time
@@ -254,6 +237,26 @@ function checkanswer(event){
     }
 
     emptyQuiz(questionDiv); //If all the question is answered, the question page is deleted.
+    
+}
+
+
+// Show answer choices on the page and event deligation to lists.
+function answerChoices(){
+    var lists = document.createElement("ol");
+    // for loop
+    for (var i=0; i<questions[index].choices.length;i++){
+        var options = document.createElement("li");
+        options.textContent = questions[index].choices[i];
+        var optionButton=document.createElement("button");
+        optionButton.setAttribute("style",("width:"+options.innerHTML.length));
+        optionButton.append(options);
+        optionButton.setAttribute("id",i);
+        lists.append(optionButton);
+
+    }
+    questionDiv.append(lists);
+    lists.addEventListener("click",validate);
 }
 
 // Start Quiz button. Here our start quiz button handles a click event.
