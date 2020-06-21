@@ -194,12 +194,13 @@ function emptyQuiz(el){ //This is called after each question is shown and user c
 // This function checks the player answer.
 function validate(event){
     event.preventDefault();
+    var f=event.target;
     var answer ;
-    if(event.target.matches("li")){
-        answer = event.target.parentElement.getAttribute("id");
+    if(f.matches("li")){
+        answer = f.parentElement.getAttribute("id");
     }
-    else if (event.target.matches("button")){
-        answer = event.target.getAttribute("id"); 
+    else if (f.matches("button")){
+        answer = f.getAttribute("id"); 
     }
     else{
         return;
