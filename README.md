@@ -13,3 +13,5 @@
 *	When the time runs out or the player finishes all the questions, he's presented with a dynamically created page and asked to enter his initials. When he hits submit button, an entry object is formed with fields name and score. First, we get the players which are addressed as contenders from the local storage. We search if the user exits. If that's the case his entry is replaced, other wise pushed to the array of objects and stored in the local storage.
 
 *	"score.html" is shown on top of the page which lists high scores with go back and delete buttons. We get all the contenders from the storage. We find the players with maximum score or scores and show it on the text area. When clear high score button is clicked, the highest score or scores are cleared from the local storage and text area is populated with the next highest score or scores.
+![Code quiz screenshoot](https://user-images.githubusercontent.com/43423292/85214483-3613da80-b339-11ea-9365-94b271298d36.PNG)
+
