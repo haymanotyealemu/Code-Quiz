@@ -1,3 +1,14 @@
+// DOM Manupilation
+var startQuizEl = document.getElementById("startQuiz");
+// Variable Declaration
+var timerEl;
+var containerEl;
+var quizTimeEl;
+var quizShowDiv;
+var contentEl;
+var timerInterval;
+
+
 // Array of object Questions and Answers stored in a variable.
 var questions = [
 {
@@ -27,241 +38,231 @@ var questions = [
 },
 
 ];
-// Dom Manipulation
-var startQuizEl = document.getElementById("startQuiz");
-var sectionEl = document.getElementById("main-content");
-var containerEl = document.getElementById("container");
-var timerEl = document.getElementById("time-span");
-
-
 var scores=[];
-
 //this is the object in which I store my players.
-var entry = {
-    name:"",
-    score:0,
+var entry={
+      name:"",
+      score:0,
 };
 
  //This function removes all the children of el
-function emptyQiz2(el){
-
-    while (el.firstChild) {
-        el.removeChild(el.firstChild);
-    } 
+function emptyQuiz2(el){
+  
+     while (el.firstChild) {
+         el.removeChild(el.firstChild);
+     } 
 }
+
 index=0;
 
+var secondsLeft = (10*questions.length); //10 seconds are given for each question
 
-var secondsLeft = (10*questions.length); // Given that 10 second for each question.
-//set time for questions.
-function setTime(){
-    timeInterval = setInterval(function(){
-    if(secondsLeft > 0){
-        secondsLeft--;
-    }
-    else{
-        secondsLeft = 0;
-    }
-    timerEl.innerHTML = secondsLeft;
-    if(secondsLeft === 0){
-        clearInterval(timeInterval);
-        timerEl.innerHTML = secondsLeft;
-        emptyQuiz2(questionDiv);
-        finalStage();
-    }
-    },1000)
+function setTime() { //set the timer
+  timerInterval = setInterval(function() {
+ if (secondsLeft>0){     
+  secondsLeft--;
+ }
+ else{
+     secondsLeft=0; //There may be occasions when secondsLeft is negative, especially if you run out of time and answered question wrong
+ }                 //in that case, set the timer to 0.
+  timerEl.innerHTML = secondsLeft;
+  if(secondsLeft === 0) { //when timer is 0, stop the timer. Clear the screen and at final step, dynamically create the page where you input your initials.
+    clearInterval(timerInterval);
+    timerEl.innerHTML = secondsLeft;  
+    emptyQuiz2(quizShowDiv);
+    console.log("time is over");
+    finalStep();
+  }
+
+}, 1000);
 }
+//This function is called when startQuiz button is clicked. Timer starts, show the question page  
+function quizShow(event){
+if(event.target.getAttribute("id")==="startQuiz"){  
+  event.preventDefault();
+  timerEl=document.getElementById("time-span");
+  timerEl.innerHTML=secondsLeft;
+  setTime();
+  containerEl=document.getElementById("container");
+  containerEl.classList.add("hide");
 
-// This function is called when startQuiz button is clicked. Timer starts, show the question page 
-function questionShow(event){
-    if (event.target.getAttribute("id")=== "startQuiz"){
-        event.preventDefault();
-        timerEl.innerHTML = secondsLeft;
-        setTime();
-        containerEl.classList.add("hide");
-        questionDiv=document.createElement("div");
-        questionDiv.setAttribute("id","quizShow");
-        showQuestion();
-        
-    }
-
-}
-//finds the index of player e in the player list
-function find(e){ 
-
-    for (var j=0;j<scores.length;j++){
-        if (scores[j].name===(e.name)){
-            return j;
-        }
-    }
-    return -1;
+  quizShowDiv=document.createElement("div");
+  quizShowDiv.setAttribute("id","quizShow");
+  showQuestion();
+} 
+} 
+function find(e){ //finds the index of player e in the player list
+ 
+  for (var j=0;j<scores.length;j++){
+      if (scores[j].name===(e.name)){
+          return j;
+      }
+  }
+  return -1;
 }
 //Get the initials and the score.This function is fired up when submit button is cicked, store the player in the local storage 
 function storeScore(event){
-    event.preventDefault();
-    var exist=-1;
-    var ini=document.getElementById("initials");
+  event.preventDefault();
+  var exist=-1;
+  var ini=document.getElementById("initials");
 
-    entry={
-        name: ini.value.toUpperCase(),
-        score:secondsLeft,
-    };
-    scores=JSON.parse(localStorage.getItem("contenders"));
+   entry={
+      name: ini.value.toUpperCase(),
+      score:secondsLeft,
+  };
+  scores=JSON.parse(localStorage.getItem("contenders"));
+ 
+  if(scores==null){
+      scores=[];
+      exists=-1;
+  }
+  else{
+      var exists=find(entry);
+     
+  }   
+  
+  if(exists>=0){
+      scores.splice(exists,1); //if the entry is already in the local storage, remove it first to store the new score
+      console.log(scores);
+      localStorage.setItem("contenders",JSON.stringify(scores));
+  }
+  scores.push(entry); 
+      
 
-    if(scores==null){
-        scores=[];
-        exists=-1;
-    }
-    else{
-        var exists=find(entry);
-    
-    }   
-    
-    if(exists>=0){
-        scores.splice(exists,1); //if the entry is already in the local storage, remove it first to store the new score
-        console.log(scores);
-        localStorage.setItem("contenders",JSON.stringify(scores));
-    }
-    scores.push(entry); 
-        
+  
+  localStorage.setItem("contenders",JSON.stringify(scores));
 
-    
-    localStorage.setItem("contenders",JSON.stringify(scores));
+ window.open("score.html","_top");//open the page that lists the players with max scores
 
-    window.open("score.html","_top");//open the page that lists the players with max scores
+      
 }
-// finally create a page which allow for the player to see the current score and to enter their initials to be submited and store in the local storage.
-function  finalStage(){
-    if (secondsLeft>0){
-        clearInterval(timeInterval);
-    }
-    var message = document.createElement("h1");
-    message.textContent = "All Done!!"
-    message.setAttribute("style","margin-left:3.5em;");
-    var secondMessage = document.createElement("h2");
-    secondMessage.textContent = "Your Final Score is :" +secondsLeft;
-    secondMessage.setAttribute("style","margin-left:5em;");
+//Dynamically create the page which gets the user's initials and shows their score. When submit button is clicked , storeScore function is fired up
+function finalStep(){
+  if(secondsLeft>0){
+    clearInterval(timerInterval);
+  }  
+  var message=document.createElement("h1");
+  message.textContent="All Done!!"
+  message.setAttribute("style","margin-left:3.5em;");
+  var message2=document.createElement("h2");
+  message2.textContent="score: "+secondsLeft;
+  message2.setAttribute("style","margin-left:5em;");
+  var label=document.createElement("label");
+  label.textContent="Enter Initials:"
+  label.setAttribute("style","margin-left:4em;margin-top:2rem;");
+  var textbox=document.createElement("input");
+  textbox.setAttribute("type","text");
+  textbox.setAttribute("id","initials");
+  label.setAttribute("for","initials");
+  textbox.setAttribute("style","margin-left:1em;margin-bottom:3em;margin-top:2em;");
+  var submitButton=document.createElement("input");
+  submitButton.setAttribute("type","submit");
+  submitButton.setAttribute("id","submitButton");
+  submitButton.setAttribute("class","button");
+  submitButton.setAttribute("style","display:inline-block;position:relative;left:3%;padding:0px;font-size:0.8rem;");
 
-    var label=document.createElement("label");
-    label.textContent="Enter Initials:"
-    label.setAttribute("style","margin-left:4em;margin-top:2rem;");
-    
 
-    var initialsBox=document.createElement("input");
-    initialsBox.setAttribute("type","text");
-    initialsBox.setAttribute("id","initials");
-    label.setAttribute("for","initials");
-    initialsBox.setAttribute("style","margin-left:1em;margin-bottom:3em;margin-top:2em;");
-   
 
-    var submitButton=document.createElement("input");
-    submitButton.setAttribute("type","submit");
-    submitButton.setAttribute("id","submitButton");
-    submitButton.setAttribute("class","button");
-    submitButton.setAttribute("style","display:inline-block;position:relative;left:3%;padding:0px;font-size:0.8rem;");
-    questionDiv.append(message);
-    questionDiv.append(secondMessage);
-    questionDiv.append(label);
-    questionDiv.append(initialsBox);
-    questionDiv.append(submitButton);
-    submitButton.addEventListener("click", storeScore());     
+  quizShowDiv.append(message);
+  quizShowDiv.append(message2);
+  quizShowDiv.append(label);
+  quizShowDiv.append(textbox);
+  quizShowDiv.append(submitButton);
 
+  submitButton.addEventListener("click",storeScore);
+  
 }
 //Shows the questions on the page
 function showQuestion(){
-    if(index>=questions.length)
-        {finalStage();
-            return;}
-    var question=document.createElement("p");
-    question.textContent=questions[index].quiz;
-    questionDiv.append(question);
-    questionDiv.setAttribute("style","display:block");
-    sectionEl.append(questionDiv);
-
-    answerChoices(); //lists the options
+  if(index>=questions.length){finalStep();return;}
+  var question=document.createElement("p");
+  question.textContent=questions[index].quiz;
+  quizShowDiv.append(question);
+  quizShowDiv.setAttribute("style","display:block");
+  contentEl=document.getElementById("main-content");
+  contentEl.append(quizShowDiv); 
+  showOptions(); //lists the options
 }
-
 function emptyQuiz(el){ //This is called after each question is shown and user choses an option, it empties the page and shows another question
-    setTimeout(function(){
-        while (el.firstChild) {
-            el.removeChild(el.firstChild);
-        }
-
-        showQuestion();
-
-    },1000);  
+   setTimeout(function(){
+      while (el.firstChild) {
+          el.removeChild(el.firstChild);
+      }
+    
+         showQuestion();
+        
+  },1000);  
 }
-// This function checks the player answer.
+
+
+//when you click the list or the button, the answer is read
 function validate(event){
-    event.preventDefault();
-    var f=event.target;
-    var answer ;
-    if(f.matches("li")){
-        answer = f.parentElement.getAttribute("id");
-    }
-    else if (f.matches("button")){
-        answer = f.getAttribute("id"); 
-    }
-    else{
-        return;
-    }
+  event.preventDefault();
+  var t=event.target;
+  var answer;
+  if(t.matches("li")){
+      answer=t.parentElement.getAttribute("id");
+  }   
+  else if(t.matches("button")){
+      answer=t.getAttribute("id");
+  }
+  else{
+      return;
+  }
+  //then put a page divider to show the answer
+  quizShowDiv.append(document.createElement("hr"));
+  var result=document.createElement("p"); //dynamically create the answer
+  result.classList.add("answer");
+  if(questions[index].choices[answer]==questions[index].answer){ //checks if answer is right
+      result.textContent="Right!!";
+      console.log("right");
+  }
+  else{
+      result.textContent="Wrong!!";
+      console.log("wrong");
+      if((secondsLeft-5)>=0){
+          secondsLeft-=5; //subtract 5 seconds from the timer if the answer us wrong and we user has more than 5 seconds
+      } 
+      else{
+          secondsLeft=0; //otherwise user runs out of time
+          return;
+      }   
+      
+  }
+  quizShowDiv.append(result); //show the result
+  
+  if (index<questions.length){ //checks if all the questions are answered
+     index++;
+  } 
+  else{
+     // alert("it's over!!");
+      return;
+  }  
+ 
+   emptyQuiz(quizShowDiv); //If all the question is answered, the question page is deleted
+   
+}
+//shows the question's answer and event listener is set on the list
+function showOptions(){
+  var list=document.createElement("ol");
+  for(var i=0;i<questions[index].choices.length;i++){
 
-// show the result to the player and divide the page in section.
-    questionDiv.append(document.createElement("hr"));
-    var result = document.createElement("p");
-    result.classList.add("answer");
-    if(questions[index].choices[answer]==questions[index].answer){ //checks if answer is right
-    result.textContent="Right!!";
-    console.log("right");
-    }
-    else{
-        result.textContent="Wrong!!";
-        console.log("wrong");
-    if((secondsLeft-5)>=0)
-        {
-        secondsLeft-=5; //subtract 5 seconds from the timer if the answer us wrong and we user has more than 5 seconds
-        } 
-    else{
-        secondsLeft=0; //otherwise user runs out of time
-        return;
-        }   
-    
-    }
-    questionDiv.append(result); //show the result
+      var option=document.createElement("li");
+      option.textContent=questions[index].choices[i];
+      var optionButton=document.createElement("button");
+      optionButton.setAttribute("style",("width:"+option.innerHTML.length));
+      optionButton.append(option);
+      optionButton.setAttribute("id",i);
+      list.append(optionButton);
+      
 
-    if (index<questions.length){ //checks if all the questions are answered
-        index++;
-    } 
-    else{
-        alert("it's over!!");
-        return;
-    }
+  }
 
-    emptyQuiz(questionDiv); //If all the question is answered, the question page is deleted.
-    
+  quizShowDiv.append(list);
+  list.addEventListener("click",validate);
 }
 
 
-// Show answer choices on the page and event deligation to lists.
-function answerChoices(){
-    var lists = document.createElement("ol");
-    // for loop
-    for (var i=0; i<questions[index].choices.length;i++){
-        var options = document.createElement("li");
-        options.textContent = questions[index].choices[i];
-        var optionButton=document.createElement("button");
-        optionButton.setAttribute("style",("width:"+options.innerHTML.length));
-        optionButton.append(options);
-        optionButton.setAttribute("id",i);
-        lists.append(optionButton);
 
-    }
-    questionDiv.append(lists);
-    lists.addEventListener("click",validate);
-}
-
-// Start Quiz button. Here our start quiz button handles a click event.
-startQuizEl.addEventListener("click",questionShow);
-    
-    
+startQuizEl.addEventListener("click",quizShow); //event listener for the beginning of the quiz
 

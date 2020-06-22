@@ -33,10 +33,10 @@
                     score:0,        //player score
         }; 
 
-        var maxEntry=[]          //This array holds the players with max store
+        var maxEntry=[]             //This array holds the players with max stores
         var maxScore=0;
-        texarea.innerHTML="";
-        entry=JSON.parse(localStorage.getItem("contenders")); //get the player from local storage and store it in array player
+        textArea.innerHTML="";
+        entry=JSON.parse(localStorage.getItem("contenders")); //get the players from local storage and store it in array entry
 
         function find(e){ //finds the index of player e in the player list
             for (var j=0;j<entry.length;j++){
@@ -49,21 +49,21 @@
         
         function findMax(entry){  //finds the players with max scores
             for (var i=0;i<entry.length;i++){
-                if(entry[i].score>=maxScore){
-                    if (entry[i].score==maxScore){
-                        maxEntry.push(entry[i]);
-                    }
-                    else{
-                        maxScore=entry[i].score;
-                        maxEntry=[];
-                        maxEntry.push(entry[i]) ;  
-                    }       
-                }    
+                 if(entry[i].score>=maxScore){
+                      if (entry[i].score==maxScore){
+                          maxEntry.push(entry[i]);
+                      }
+                      else{
+                          maxScore=entry[i].score;
+                          maxEntry=[];
+                          maxEntry.push(entry[i]) ;  
+                      }       
+                 }    
             }     
             
             for (var i=0;i<maxEntry.length;i++){
-                texarea.innerHTML+=maxEntry[i].name+":"+maxEntry[i].score+"\n";  
-            }
+                textArea.innerHTML+=maxEntry[i].name+":"+maxEntry[i].score+"\n";  
+             }
         }
 
         findMax(entry);
@@ -77,19 +77,19 @@
                     localStorage.setItem("contenders",JSON.stringify(entry));
                     
                 }
-
-                texarea.innerHTML="";
+               
+                textArea.innerHTML="";
                 if (entry.length>0){
                     maxEntry=[];
                     maxScore=0;
                     findMax(entry);
                 }          
                 
-        
+               
         });
         //when back button is clicked the updated player list is pushed to the storage
         gobackBtn.addEventListener("click",function(){
-            localStorage.setItem("contenders",JSON.stringify(entry));
+             localStorage.setItem("contenders",JSON.stringify(entry));
         });
 
     </script>
