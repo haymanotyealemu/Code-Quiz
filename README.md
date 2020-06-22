@@ -4,7 +4,7 @@
 
 * This Timer based code quiz application is developed using the HTML5, CSS and JavaScript programming language. The application display five multiple code related questions one by one when the start-quiz button is clicked.
 
-*	Once the quiz starts the clock starts work and count down. Each question has a time limit of 15 seconds and incorrect answer lead to penalize from the score the plyer got. based on this rule the app setup to deduct 5 seconds from each of incorrect answers.
+*	Once the quiz starts the clock starts work and count down. Each question has a time limit of 10 seconds and incorrect answer lead to penalize from the score the plyer got. based on this rule the app setup to deduct 5 seconds from each of incorrect answers.
 
 *	The player's score is calculated by the time remaining. When the time runs out and/or all questions are answered, the user is presented with their final scores and asked to enter their initials. Their final scores and initials are stored in local storage. If the user took the quiz before, his previous score will be overwritten with his last score. 
 
